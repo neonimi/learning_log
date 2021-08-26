@@ -1,0 +1,26 @@
+{% extends "learning_logs/base.html" %}
+
+{% block page_header %}
+	<h3>{{ topic }}</h3>
+{% endblock page_header %}
+
+{% block content %}
+	<p>
+		<a href="{% url 'learning_logs:new_entry' topic.id %}">新しい記事を追加</a>
+	</p>
+
+	{% for entry in entries %}
+	<div class="card mb-3">
+		<h5 class="card-header">
+			<p>{{ entry.date_added|date:'Y年m月d日 H:i' }}</p>
+			{% if user.is_authenticated %}
+			<small><a class="text-secondary" href="{% url 'learning_logs:edit' entry.id %}">記事を編集</a></small>
+			{% endif %}
+		</h5>
+		<div class="card-body">{{ entry.text|linebreaks }}</div>
+	</div>
+	{% empty %}
+		<p>このトピックにはまだ記事がありません。</p>
+	{% endfor %}
+	
+{% endblock content%}
